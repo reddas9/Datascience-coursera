@@ -76,3 +76,7 @@ testing <- testing[-1,]
 set.seed(12345)
 modFitA1 <- rpart(classe ~ ., data=myTraining, method="class")
 fancyRpartPlot(modFitA1)
+
+predictionsA1 <- predict(modFitA1, myTesting, type = "class")
+cmtree <- confusionMatrix(predictionsA1, myTesting$classe)
+cmtree
