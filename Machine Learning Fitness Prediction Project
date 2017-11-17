@@ -45,3 +45,34 @@ for(i in 1:length(myTraining)) {
 myTraining <- trainingV3
 rm(trainingV3)
 
+##Transform the myTesting and testing data sets
+
+clean1 <- colnames(myTraining)
+clean2 <- colnames(myTraining[, -58])  # remove the classe column
+myTesting <- myTesting[clean1]         # allow only variables in myTesting that are also in myTraining
+testing <- testing[clean2]             # allow only variables in testing that are also in myTraining
+
+dim(myTesting)
+## [1] 7846   58
+dim(testing)
+## [1] 20 57
+
+##Coerce the data into the same type
+
+for (i in 1:length(testing) ) {
+    for(j in 1:length(myTraining)) {
+        if( length( grep(names(myTraining[i]), names(testing)[j]) ) == 1)  {
+            class(testing[j]) <- class(myTraining[i])
+        }      
+    }      
+}
+
+# To get the same class between testing and myTraining
+testing <- rbind(myTraining[2, -58] , testing)
+testing <- testing[-1,]
+
+##Prediction with Decision Trees
+
+set.seed(12345)
+modFitA1 <- rpart(classe ~ ., data=myTraining, method="class")
+fancyRpartPlot(modFitA1)
