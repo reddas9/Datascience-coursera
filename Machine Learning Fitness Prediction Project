@@ -1,8 +1,47 @@
-Inroduction :
-Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of 
-data about personal activity relatively inexpensively. These type of devices are part of the quantified self
-movement - a group of enthusiasts who take measurements about themselves regularly to improve their health, 
-to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is 
-quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this 
-project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants.
-They were asked to perform barbell lifts correctly and incorrectly in 5 different ways.
+##Getting and loading the data
+set.seed(12345)
+
+trainUrl <- "http://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"
+testUrl <- "http://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv"
+
+training <- read.csv(url(trainUrl), na.strings=c("NA","#DIV/0!",""))
+testing <- read.csv(url(testUrl), na.strings=c("NA","#DIV/0!",""))
+
+##Partioning the training set into two
+
+inTrain <- createDataPartition(training$classe, p=0.6, list=FALSE)
+myTraining <- training[inTrain, ]
+myTesting <- training[-inTrain, ]
+dim(myTraining); dim(myTesting)
+## [1] 11776   160
+## [1] 7846  160
+
+
+##Cleaning the data
+Remove NearZeroVariance variables
+
+nzv <- nearZeroVar(myTraining, saveMetrics=TRUE)
+myTraining <- myTraining[,nzv$nzv==FALSE]
+
+nzv<- nearZeroVar(myTesting,saveMetrics=TRUE)
+myTesting <- myTesting[,nzv$nzv==FALSE]
+##Remove the first column of the myTraining data set
+
+myTraining <- myTraining[c(-1)]
+##Clean variables with more than 60% NA
+
+trainingV3 <- myTraining
+for(i in 1:length(myTraining)) {
+    if( sum( is.na( myTraining[, i] ) ) /nrow(myTraining) >= .7) {
+        for(j in 1:length(trainingV3)) {
+            if( length( grep(names(myTraining[i]), names(trainingV3)[j]) ) == 1)  {
+                trainingV3 <- trainingV3[ , -j]
+            }   
+        } 
+    }
+}
+
+# Set back to the original variable name
+myTraining <- trainingV3
+rm(trainingV3)
+
