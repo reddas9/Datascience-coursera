@@ -80,3 +80,14 @@ fancyRpartPlot(modFitA1)
 predictionsA1 <- predict(modFitA1, myTesting, type = "class")
 cmtree <- confusionMatrix(predictionsA1, myTesting$classe)
 cmtree
+
+## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction    A    B    C    D    E
+##          A 2150   60    7    1    0
+##          B   61 1260   69   64    0
+##          C   21  188 1269  143    4
+##          D    0   10   14  857   78
+##          E    0    0    9  221 1360
+## 
