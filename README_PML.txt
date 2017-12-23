@@ -1,3 +1,3 @@
 # Datascience-coursera
-Please find the training and testing datasets uploaded as .csv files.
+Please find the training and testing datasets uploaded as .csv files.(pml-testing.csv, pml-training.csv)
 The code and HTML files uploaded seperately
